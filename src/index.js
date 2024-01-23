@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 const pcal = require('./protocol')
 const mc = require('./minecraft')
@@ -30,11 +30,16 @@ const createWindow = () => {
   window.setWindow = mainWindow;
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 };
+
 app.on('ready', async () => {
   createWindow()
   pcal.createProtocol()
   window.getWindow.webContents.send("loadBgImage", path.join(__dirname, "img/world_of_color.png"))
   mc.login()
+
+  ipcMain.handle("launchGame", async (event) => {
+    mc.launchGame()
+  })
 });
 
 app.on('window-all-closed', () => {
