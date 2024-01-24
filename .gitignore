@@ -93,3 +93,6 @@ out/
 
 src/minecraft
 src/data
+bettermclauncher-darwin-x64/
+bettermclauncher-win32-x64/
+build/macos/*.dmg

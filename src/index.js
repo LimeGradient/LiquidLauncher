@@ -29,17 +29,21 @@ const createWindow = () => {
   });
   window.setWindow = mainWindow;
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  const bgImages = ["buzzybees", "cats_and_pandas", "caves_and_cliffs_1", "caves_and_cliffs_2", "nether_update", "trails_and_tales", "update_aquatic", "village_and_pillage", "warden", "wild_update"]
+  mainWindow.webContents.send("loadBgImage", path.join(__dirname, `img/${bgImages[Math.floor(Math.random() * bgImages.length) - 1]}.png`))
 };
 
-app.on('ready', async () => {
-  createWindow()
+app.on('ready', () => {
   pcal.createProtocol()
-  window.getWindow.webContents.send("loadBgImage", path.join(__dirname, "img/world_of_color.png"))
-  mc.login()
+  setTimeout(() => {
+    createWindow()
 
-  ipcMain.handle("launchGame", async (event) => {
-    mc.launchGame()
-  })
+    ipcMain.handle("launchGame", async (event, version) => {
+      mc.launchGame(version)
+    })
+  
+    mc.login()
+  }, 500)
 });
 
 app.on('window-all-closed', () => {

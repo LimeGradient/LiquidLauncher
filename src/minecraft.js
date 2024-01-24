@@ -37,6 +37,8 @@ async function login() {
                 token.setToken = await xboxManager.getMinecraft()
                 fs.writeFile(path.join(__dirname, "data/mc.json"), JSON.stringify(mc_data), 'utf8', err => { if (err) throw err; })
                 win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
+            }).catch((err) => {
+                if (err) throw err;
             })
         } else {
             const json_data = JSON.parse(file)
@@ -45,19 +47,25 @@ async function login() {
                 const xbx = await xboxManager.getMinecraft()
                 token.setToken = await xboxManager.getMinecraft()
                 win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
+            }).catch((err) => {
+                console.log(`Error Code: ${err['response']['status']}`)
+                if (err['response']['status'] == 429) {
+                    console.error(err['response']['status'])
+                }
             })
         }
     })
 }
 
-function launchGame() {
+function launchGame(version) {
+    fs.rmSync(path.join(__dirname, "minecraft"), {recursive: true, force: true})
     console.log(token.getToken)
     let opts = {
         clientPackage: null,
         authorization: token.getToken.mclc(),
         root: path.join(__dirname, "minecraft"),
         version: {
-            number: "1.8.9",
+            number: version,
             type: "release",
         },
         memory: {

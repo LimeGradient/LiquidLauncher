@@ -2,14 +2,16 @@
   "name": "bettermclauncher",
   "productName": "bettermclauncher",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "A Better MC Launcher",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "build-macos": "npx electron-packager ./ --platform=darwin --icon=build/macos/icon.icns --overwrite && rm -f build/macos/BetterMC-Launcher-Installer.dmg && npx appdmg build/macos/dmg.json build/macos/BetterMC-Launcher-Installer.dmg",
+    "build-win": "npx electron-packager ./ --platform=win32 --icon=build/win32/icon.ico --overwrite"
   },
   "keywords": [],
   "author": {
@@ -18,15 +20,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
+    "electron-packager": "^17.1.2",
     "minecraft-launcher-core": "^3.17.3",
     "msmc": "^4.1.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
-    "@electron-forge/maker-deb": "^7.2.0",
-    "@electron-forge/maker-rpm": "^7.2.0",
-    "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
     "electron": "28.1.4"

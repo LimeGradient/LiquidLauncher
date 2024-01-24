@@ -1,0 +1,15 @@
+{
+    "title": "BetterMC Launcher Installer",
+    "icon": "icon.icns",
+    "background": "dmg_background.png",
+    "contents": [
+        { "x": 448, "y": 344, "type": "link", "path": "/Applications" },
+        { "x": 192, "y": 344, "type": "file", "path": "../../bettermclauncher-darwin-x64/bettermclauncher.app" }
+    ],
+    "window": {
+        "size": {
+            "width": 640,
+            "height": 480
+        }
+    }
+}

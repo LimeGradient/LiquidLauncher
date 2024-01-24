@@ -19,18 +19,19 @@ html, body {
   transform: scale(1.1);
 }
 
-.title {
+.title, .launch {
   position: absolute;
   top: 5%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
+.title {
+  color: white;
+}
+
 .launch {
-  position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .login {
@@ -38,6 +39,19 @@ html, body {
   top: 7.5%;
   right: 0%;
   transform: translate(-50%, -50%);
+}
+
+.account-button {
+  position: absolute;
+  top: 75%;
+  right: 25%;
+  transform: translate(-10%, -25%);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
 }
 
 .launcher-window {
