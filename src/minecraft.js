@@ -1,5 +1,6 @@
 const { Client } = require('minecraft-launcher-core')
 const { Auth } = require('msmc')
+const {readdir} = require("fs/promises")
 
 const fs = require('fs')
 const path = require('path')
@@ -14,8 +15,11 @@ const token = {
 }
 
 const mc_data = {
-    data: []
+    data: [],
+    java: null
 }
+
+const javaVMS = []
 
 const launcher = new Client()
 
@@ -57,9 +61,25 @@ async function login() {
     })
 }
 
+function getJavaVMS() {
+    const getJavaVM = async source => (await readdir(source, {withFileTypes: true})).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
+    if (process.platform === "darwin") {
+        getJavaVM("/Library/Java/JavaVirtualMachines/").then((dirs) => {
+            for (const dir of dirs) {
+                if (dir.includes("1.8") || dir.includes("17") || dir.includes("18") || dir.includes("19")) {
+                    const jvmpath = path.join("/Library/Java/JavaVirtualMachines/", dir, "/Contents/Home/bin/java")
+                    javaVMS.push(jvmpath)
+                    console.log(`Java Path: ${jvmpath}`)
+                }
+            }
+        })
+    }
+}
+
 function launchGame(version) {
     fs.rmSync(path.join(__dirname, "minecraft"), {recursive: true, force: true})
     console.log(token.getToken)
+
     let opts = {
         clientPackage: null,
         authorization: token.getToken.mclc(),
@@ -72,6 +92,20 @@ function launchGame(version) {
             max: "6G",
             min: "4G",
         },
+        javaPath: "",
+    }
+
+    console.log(parseFloat(version))
+    if (version === "1.18" || version === "1.19" || version === "1.20") {
+        javaVMS.forEach(vm => {
+            if (vm.includes("19"))
+                opts.javaPath = vm
+        })
+    } else {
+        javaVMS.forEach(vm => {
+            if (vm.includes("1.8"))
+                opts.javaPath = vm
+        })
     }
 
     launcher.launch(opts)
@@ -82,3 +116,4 @@ function launchGame(version) {
 
 exports.login = login
 exports.launchGame = launchGame
+exports.getJavaVMS = getJavaVMS

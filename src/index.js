@@ -37,7 +37,7 @@ app.on('ready', () => {
   pcal.createProtocol()
   setTimeout(() => {
     createWindow()
-
+    mc.getJavaVMS()
     ipcMain.handle("launchGame", async (event, version) => {
       mc.launchGame(version)
     })
