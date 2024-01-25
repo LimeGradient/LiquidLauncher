@@ -23,7 +23,31 @@ const javaVMS = []
 
 const launcher = new Client()
 
+async function checkLogin() {
+    win.window.getWindow.webContents.send("loggingIn");
+    fs.readFile(path.join(__dirname, "data/mc.json"), async (err, file) => {
+        if (file.length == 0) {
+            win.window.getWindow.webContents.send("notLoggedIn");
+            return
+        } else {
+            const json_data = JSON.parse(file)
+            const authManager = new Auth("login")
+            authManager.refresh(json_data.data[0].token).then(async xboxManager => {
+                const xbx = await xboxManager.getMinecraft()
+                token.setToken = await xboxManager.getMinecraft()
+                win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
+            }).catch((err) => {
+                console.log(`Error Code: ${err['response']['status']}`)
+                if (err['response']['status'] == 429) {
+                    console.error(err['response']['status'])
+                }
+            })
+        }
+    })
+}
+
 async function login() {
+    win.window.getWindow.webContents.send("loggingIn");
     if (!fs.existsSync(path.join(__dirname, "data"))) {
         fs.mkdirSync(path.join(__dirname, "data"))
     }
@@ -43,19 +67,6 @@ async function login() {
                 win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
             }).catch((err) => {
                 if (err) throw err;
-            })
-        } else {
-            const json_data = JSON.parse(file)
-            const authManager = new Auth("login")
-            authManager.refresh(json_data.data[0].token).then(async xboxManager => {
-                const xbx = await xboxManager.getMinecraft()
-                token.setToken = await xboxManager.getMinecraft()
-                win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
-            }).catch((err) => {
-                console.log(`Error Code: ${err['response']['status']}`)
-                if (err['response']['status'] == 429) {
-                    console.error(err['response']['status'])
-                }
             })
         }
     })
@@ -136,3 +147,4 @@ function launchGame(version) {
 exports.login = login
 exports.launchGame = launchGame
 exports.getJavaVMS = getJavaVMS
+exports.checkLogin = checkLogin

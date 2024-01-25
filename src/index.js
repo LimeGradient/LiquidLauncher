@@ -2,7 +2,7 @@ const path = require('path');
 
 const { app, BrowserWindow, ipcMain } = require('electron');
 
-const pcal = require('./protocol')
+const pcal = require('./util/protocol')
 const mc = require('./minecraft')
 
 if (require('electron-squirrel-startup')) {
@@ -41,8 +41,12 @@ app.on('ready', () => {
     ipcMain.handle("launchGame", async (event, version) => {
       mc.launchGame(version)
     })
-  
-    mc.login()
+    
+    ipcMain.handle("login", (event) => {
+      mc.login()
+    })
+
+    mc.checkLogin()
   }, 500)
 });
 
