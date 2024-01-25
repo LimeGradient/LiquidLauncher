@@ -74,6 +74,25 @@ function getJavaVMS() {
             }
         })
     }
+    if (process.platform === "win32") {
+        getJavaVM("C:\\Program Files (x86)\\Java").then((dirs) => {
+            for (const dir of dirs) {
+                if (dir.includes("1.8")) {
+                    javaPath = path.join("C:\\Program Files (x86)\\Java", dir, "\\bin\\java.exe")
+                    console.log(`[Lime]: Set Java Path to ${javaPath}`)
+                }
+            }
+        }).catch((err) => {
+            getJavaVM("C:\\Program Files\\Java").then((dirs) => {
+                for (const dir of dirs) {
+                    if (dir.includes("1.8")) {
+                        javaPath = path.join("C:\\Program Files\\Java", dir, "\\bin\\java.exe")
+                        console.log(`[Lime]: Set Java Path to ${javaPath}`)
+                    }
+                }
+            })
+        })
+    }
 }
 
 function launchGame(version) {

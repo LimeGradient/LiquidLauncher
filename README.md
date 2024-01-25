@@ -13,7 +13,7 @@ Liquid Launcher aims to be a more beginner friendly Minecraft Launcher, where so
 <li>Add Support for Modded Minecraft (v2.0)</li>
 <li>Add Support for Launcher Customization (v3.0)</li>
 <li>Add Support for Custom Minecraft JAR's (v3.0)</li>
-<li>Add Support for Uploading Custom Minecraft JAR's (TBD)</li>
+<li>Add Support for Uploading Custom Minecraft JAR's to a Database for others to download (TBD)</li>
 <li>Get a Website (TBD)</li>
 </ul>
 
