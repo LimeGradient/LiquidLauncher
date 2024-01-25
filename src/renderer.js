@@ -1,16 +1,38 @@
 const {ipcRenderer} = require('electron')
 
+const homepage = document.querySelector(".homepage")
+const versionPage = document.querySelector(".versions")
+
+window.onload = () => {
+    versionPage.style.visibility = "hidden"
+}
+
+let mcVersion;
+
 ipcRenderer.on('loadBgImage', async (event, path) => {
-    document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
+    // document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
     
     setTimeout(() => {
-        document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
+        // document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
     }, 500)
 })
 
+function setVersion(version) {
+    mcVersion = version;
+}
+
 document.querySelector(".launch-button").addEventListener("click", () => {
-    const mcVersion = document.getElementById("versions").value
     ipcRenderer.invoke("launchGame", mcVersion);
+})
+
+document.querySelector(".loadHomePage").addEventListener("click", () => {
+    homepage.style.visibility = "visible"
+    versionPage.style.visibility = "hidden"
+})
+
+document.querySelector(".loadVersionPage").addEventListener("click", () => {
+    homepage.style.visibility = "hidden"
+    versionPage.style.visibility = "visible"
 })
 
 ipcRenderer.on("setSkin", async (event, profileId) => {

@@ -1,48 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Liquid Launcher</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <div class="bg-image"></div>
-    <div class="launcher-window">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Liquid Launcher</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+  <button class="loadHomePage custom-button">Home</button> <div class="divider"></div>
+  <button class="loadVersionPage custom-button">Versions</button>
+  <div class="launcher-window">
+    <div class="homepage">
       <h1 class="title">Liquid Launcher</h1>
       <div class="launch">
-        <label for="versions" style="color: white;">Versions: </label>
-        <select name="versions" id="versions">
-          <option value="1.0.0">Minecraft 1.0</option>
-          <option value="1.1">Minecraft 1.1</option>
-          <option value="1.2.5">Minecraft 1.2</option>
-          <option value="1.3.2">Minecraft 1.3</option>
-          <option value="1.4.7">Minecraft 1.4</option>
-          <option value="1.5.2">Minecraft 1.5</option>
-          <option value="1.6.4">Minecraft 1.6</option>
-          <option value="1.7.10">Minecraft 1.7</option>
-          <option value="1.8.9">Minecraft 1.8</option>
-          <option value="1.9.4">Minecraft 1.9</option>
-          <option value="1.10.2">Minecraft 1.10</option>
-          <option value="1.11.2">Minecraft 1.11</option>
-          <option value="1.12.2">Minecraft 1.12</option>
-          <option value="1.13.2">Minecraft 1.13</option>
-          <option value="1.14.4">Minecraft 1.14</option>
-          <option value="1.15.2">Minecraft 1.15</option>
-          <option value="1.16.5">Minecraft 1.16</option>
-          <option value="1.17.1">Minecraft 1.17</option>
-          <option value="1.18.2">Minecraft 1.18</option>
-          <option value="1.19.4">Minecraft 1.19</option>
-          <option value="1.20.4">Minecraft 1.20</option>
-
-        </select>
-        <br> <br> <br>
         <button class="launch-button custom-button">Launch</button>
       </div>
       <div class="login">
         <button class="account-button"></button>
       </div>
     </div>
+    <div class="versions">
+      <h1 class="title">Versions</h1>
+      <div class="version-list">
+        <button class="version-button" onclick="setVersion('1.12.2')"><img src="img/world_of_color.png" width="128" height="128"></button>
+        <button class="version-button" onclick="setVersion('1.13.2')"><img src="img/update_aquatic.png" width="128" height="128"></button>
+        <button class="version-button" onclick="setVersion('1.14.4')"><img src="img/village_and_pillage.png" width="128" height="128"></button>
+        <button class="version-button" onclick="setVersion('1.15.2')"><img src="img/buzzybees.png" width="128" height="128"></button>
+        <button class="version-button" onclick="setVersion('1.16.5')"><img src="img/nether_update.png" width="128" height="128"></button>
+      </div>
+    </div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
 
-    <script src="renderer.js"></script>
-  </body>
 </html>
