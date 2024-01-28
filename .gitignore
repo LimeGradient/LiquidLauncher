@@ -97,3 +97,4 @@ liquidlauncher-darwin-x64/
 liquidlauncher-win32-x64/
 liquidlauncher-win32-x64.zip
 build/macos/*.dmg
+src/cache

@@ -5,10 +5,6 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const pcal = require('./util/protocol')
 const mc = require('./minecraft')
 
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
-
 const window = {
   window: null,
   get getWindow() {return this.window},
@@ -29,8 +25,6 @@ const createWindow = () => {
   });
   window.setWindow = mainWindow;
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  const bgImages = ["buzzybees", "cats_and_pandas", "caves_and_cliffs_1", "caves_and_cliffs_2", "nether_update", "trails_and_tales", "update_aquatic", "village_and_pillage", "warden", "wild_update"]
-  mainWindow.webContents.send("loadBgImage", path.join(__dirname, `img/${bgImages[Math.floor(Math.random() * bgImages.length) - 1]}.png`))
 };
 
 app.on('ready', () => {

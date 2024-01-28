@@ -3,22 +3,21 @@ const {ipcRenderer} = require('electron')
 const homepage = document.querySelector(".homepage")
 const versionPage = document.querySelector(".versions")
 
+const title = document.querySelector(".title")
+
 window.onload = () => {
     versionPage.style.visibility = "hidden"
 }
 
 let mcVersion;
 
-ipcRenderer.on('loadBgImage', async (event, path) => {
-    // document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
-    
-    setTimeout(() => {
-        // document.querySelector(".bg-image").style.backgroundImage = `url(launcher://${path})`
-    }, 500)
-})
-
 function setVersion(version) {
     mcVersion = version;
+}
+
+function login() {
+    ipcRenderer.invoke("login")
+    console.log('clicked login button')
 }
 
 document.querySelector(".login-button").addEventListener("click", () => {
@@ -32,11 +31,13 @@ document.querySelector(".launch-button").addEventListener("click", () => {
 document.querySelector(".loadHomePage").addEventListener("click", () => {
     homepage.style.visibility = "visible"
     versionPage.style.visibility = "hidden"
+    title.innerHTML = "Liquid Launcher"
 })
 
 document.querySelector(".loadVersionPage").addEventListener("click", () => {
     homepage.style.visibility = "hidden"
     versionPage.style.visibility = "visible"
+    title.innerHTML = "Versions"
 })
 
 ipcRenderer.on("setSkin", async (event, profileId) => {

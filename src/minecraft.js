@@ -1,11 +1,12 @@
 const { Client } = require('minecraft-launcher-core')
 const { Auth } = require('msmc')
-const {readdir} = require("fs/promises")
+const {readdir, rename} = require("fs/promises")
 
 const fs = require('fs')
 const path = require('path')
 
 const win = require("./index")
+const zip = require('./util/zip')
 
 const token = {
     token: null,
@@ -37,7 +38,6 @@ async function checkLogin() {
                 token.setToken = await xboxManager.getMinecraft()
                 win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
             }).catch((err) => {
-                console.log(`Error Code: ${err['response']['status']}`)
                 if (err['response']['status'] == 429) {
                     console.error(err['response']['status'])
                 }
@@ -107,7 +107,12 @@ function getJavaVMS() {
 }
 
 function launchGame(version) {
-    fs.rmSync(path.join(__dirname, "minecraft"), {recursive: true, force: true})
+    const getVersionCache = async source => (await readdir(source, {withFileTypes: true})).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
+    if (!fs.existsSync(path.join(__dirname, "cache"))) {
+        fs.mkdirSync(path.join(__dirname, "cache"))
+        fs.mkdirSync(path.join(__dirname, "minecraft"))
+    }
+    // fs.rmSync(path.join(__dirname, "minecraft"), {recursive: true, force: true})
     console.log(token.getToken)
 
     let opts = {
@@ -125,7 +130,23 @@ function launchGame(version) {
         javaPath: "",
     }
 
+    getVersionCache(path.join(__dirname, "cache")).then((dirs) => {
+        for (const dir of dirs) {
+            if (dir.includes(version)) {
+                fs.rename(path.join(__dirname, `cache/minecraft-${version}`), path.join(__dirname, "minecraft"), (err) => {
+                    if (err) throw err
+                    console.log("Successfully got Minecraft from Cache")
+                })
+            }
+        }
+    })
+
+    if (fs.existsSync(path.join(__dirname, `cache/minecraft-${version}.zip`))) {
+        // zip.unzipFolder(path.join(__dirname, `cache/minecraft-${version}.zip`), path.join(__dirname, "minecraft"))
+    }
+
     console.log(parseFloat(version))
+
     if (version === "1.18" || version === "1.19" || version === "1.20") {
         javaVMS.forEach(vm => {
             if (vm.includes("19"))
@@ -142,6 +163,20 @@ function launchGame(version) {
 
     launcher.on("debug", (e) => console.log(e));
     launcher.on("data", (e) => console.log(e));
+    launcher.on("close", (e) => {
+        fs.rename(path.join(__dirname, "minecraft"), path.join(__dirname, `cache/minecraft-${version}`), (err) => {
+            if (err) console.log("Launcher Tried Caching Minecraft Twice. Stopping...")
+            console.log("Successfully cached Minecraft")
+        })
+        fs.rm(path.join(__dirname, "minecraft"), {recursive: true, force: true}, (err) => {
+            if (err) console.log("Launcher Tried Caching Minecraft Twice. Stopping..")
+        })
+        /* zip.zipFolder(path.join(__dirname, `cache/minecraft-${version}`), path.join(__dirname, `cache/minecraft-${version}.zip`), (err) => {
+            fs.rm(path.join(__dirname, `cache/minecraft-${version}`, {recursive: true, force: true}, (err) => {
+                if (err) console.error(err)
+            }))
+        }) */
+    })
 }
 
 exports.login = login
