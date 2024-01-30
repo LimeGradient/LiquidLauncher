@@ -9,16 +9,17 @@
 
 <body>
   <button class="loadHomePage custom-button">Home</button> <div class="divider"></div>
-  <button class="loadVersionPage custom-button">Versions</button>
+  <button class="loadVersionPage custom-button">Versions</button> <div class="divider"></div>
+  <button class="loadServerPage custom-button">Server</button>
+  <div class="login">
+    <button id="login-button" class="custom-button" onclick="login()">Login</button>
+    <button class="account-button"></button>
+  </div>
   <div class="launcher-window">
     <h1 class="title">Liquid Launcher</h1>
     <div class="homepage">
       <div class="launch">
         <button class="launch-button custom-button">Launch</button>
-      </div>
-      <div class="login">
-        <button class="login-button custom-button" onclick="login()">Login</button>
-        <button class="account-button"></button>
       </div>
     </div>
     <div class="versions">
@@ -32,6 +33,9 @@
         <button class="version-button" onclick="setVersion('1.19.4')"><img src="img/wild_update.png" width="256" height="144"></button>
         <button class="version-button" onclick="setVersion('1.20.4')"><img src="img/trails_and_tales.png" width="256" height="144"></button>
       </div>
+    </div>
+    <div class="server">
+
     </div>
   </div>
   <script src="renderer.js"></script>

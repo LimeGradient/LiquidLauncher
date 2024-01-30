@@ -22,11 +22,13 @@ const mc_data = {
 
 const javaVMS = []
 
-const launcher = new Client()
-
 async function checkLogin() {
     win.window.getWindow.webContents.send("loggingIn");
     fs.readFile(path.join(__dirname, "data/mc.json"), async (err, file) => {
+        if (err) {
+            console.log("No MC Token Found")
+            return
+        }
         if (file.length == 0) {
             win.window.getWindow.webContents.send("notLoggedIn");
             return
@@ -46,7 +48,7 @@ async function checkLogin() {
     })
 }
 
-async function login() {
+function login() {
     win.window.getWindow.webContents.send("loggingIn");
     if (!fs.existsSync(path.join(__dirname, "data"))) {
         fs.mkdirSync(path.join(__dirname, "data"))
@@ -56,19 +58,16 @@ async function login() {
             if (err) throw err;
         })
     }
-    fs.readFile(path.join(__dirname, "data/mc.json"), async (err, file) => {
-        if (file.length == 0) {
-            const authManager = new Auth("select_account")
-            authManager.launch("raw").then(async xboxManager => {
-                const xbx = await xboxManager.getMinecraft()
-                mc_data.data.push({ token: xboxManager.msToken, id: xbx.profile.id })
-                token.setToken = await xboxManager.getMinecraft()
-                fs.writeFile(path.join(__dirname, "data/mc.json"), JSON.stringify(mc_data), 'utf8', err => { if (err) throw err; })
-                win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
-            }).catch((err) => {
-                if (err) throw err;
-            })
-        }
+    const authManager = new Auth("select_account")
+    authManager.launch("raw").then(async xboxManager => {
+        const xbx = await xboxManager.getMinecraft()
+        mc_data.data.push({ token: xboxManager.msToken, id: xbx.profile.id })
+        token.setToken = await xboxManager.getMinecraft()
+        fs.writeFile(path.join(__dirname, "data/mc.json"), JSON.stringify(mc_data), 'utf8', err => { if (err) throw err; })
+        console.log(xbx.profile.id)
+        win.window.getWindow.webContents.send("setSkin", xbx.profile.id)
+    }).catch((err) => {
+        if (err) throw err;
     })
 }
 
@@ -107,6 +106,8 @@ function getJavaVMS() {
 }
 
 function launchGame(version) {
+    const launcher = new Client()
+
     const getVersionCache = async source => (await readdir(source, {withFileTypes: true})).filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
     if (!fs.existsSync(path.join(__dirname, "cache"))) {
         fs.mkdirSync(path.join(__dirname, "cache"))

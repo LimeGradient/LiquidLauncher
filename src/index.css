@@ -44,7 +44,8 @@ body {
 }
 
 .loadHomePage,
-.loadVersionPage {
+.loadVersionPage,
+.loadServerPage {
   width: 10%;
   padding: 14px 14px;
   padding-top: 10px;
