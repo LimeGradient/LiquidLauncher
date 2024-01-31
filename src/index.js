@@ -40,6 +40,10 @@ app.on('ready', () => {
       mc.login()
     })
 
+    ipcMain.handle("launchServer", (event, ram) => {
+      mc.launchServer(ram)
+    })
+
     mc.checkLogin()
   }, 500)
 });

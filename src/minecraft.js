@@ -2,11 +2,13 @@ const { Client } = require('minecraft-launcher-core')
 const { Auth } = require('msmc')
 const {readdir, rename} = require("fs/promises")
 
+const https = require('https')
 const fs = require('fs')
 const path = require('path')
 
 const win = require("./index")
 const zip = require('./util/zip')
+const cmd = require("./util/cmd")
 
 const token = {
     token: null,
@@ -180,7 +182,43 @@ function launchGame(version) {
     })
 }
 
+function launchServer(ram) {
+    const spawn = require("child_process").spawn
+    let javaVM;
+    javaVMS.forEach(vm => {
+        if (vm.includes("17") || vm.includes("18") || vm.includes("19")) {
+            javaVM = vm
+        }
+    })
+
+    if (!fs.existsSync(path.join(__dirname, "server"))) {
+        fs.mkdirSync(path.join(__dirname, "server"))
+    }
+
+    const serverJAR = fs.createWriteStream(path.join(__dirname, "server/server.jar"))
+    const req = https.get("https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar", (res) => {
+        res.pipe(serverJAR)
+        serverJAR.on("finish", () => {
+            serverJAR.close()
+            console.log("Server Download Completed")
+
+            const child = spawn(`${javaVM} -Xmx${ram}G -Xms${ram}G -jar ${path.join(__dirname, "server/server.jar")}`, [], {
+                shell: true,
+                cwd: process.cwd(),
+                env: process.env,
+                stdio: ['inherit', 'pipe', 'pipe'],
+                encoding: 'utf-8'
+            })
+            child.stdout.pipe(process.stdout)
+            child.stderr.pipe(process.stderr)
+            child.stdout.on('data', (data) => console.log(data))
+            child.stderr.on('err', (err) => console.error(err))
+        })
+    })
+}
+
 exports.login = login
 exports.launchGame = launchGame
 exports.getJavaVMS = getJavaVMS
 exports.checkLogin = checkLogin
+exports.launchServer = launchServer

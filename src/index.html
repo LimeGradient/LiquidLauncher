@@ -35,7 +35,27 @@
       </div>
     </div>
     <div class="server">
-
+      <div class="server-launch-button custom-button">Launch Server - 1.20.4</div> <br> <br>
+      <h3 id="ram-amount-h3">RAM Selected: 4GB</h3>
+      <input id="ram-amount-select" type="range" min="1" max="16" value="4" list="server-detents" style="width: 400px" oninput="displayRAM(this.value)" onchange="displayRAM(this.value)">
+      <datalist id="server-detents">
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+        <option value="6"></option>
+        <option value="7"></option>
+        <option value="8"></option>
+        <option value="9"></option>
+        <option value="10"></option>
+        <option value="11"></option>
+        <option value="12"></option>
+        <option value="13"></option>
+        <option value="14"></option>
+        <option value="15"></option>
+        <option value="16"></option>
+      </datalist>
     </div>
   </div>
   <script src="renderer.js"></script>

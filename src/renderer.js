@@ -10,6 +10,8 @@ const loginButton = document.getElementById("login-button")
 
 window.onload = () => {
     versionPage.style.visibility = "hidden"
+    serverPage.style.visibility = "hidden"
+
 }
 
 let mcVersion;
@@ -25,8 +27,16 @@ function login() {
     console.log('clicked login button')
 }
 
+function displayRAM(val) {
+    document.getElementById("ram-amount-h3").innerHTML = `RAM Selected: ${val} GB`
+}
+
 document.querySelector(".launch-button").addEventListener("click", () => {
     ipcRenderer.invoke("launchGame", mcVersion);
+})
+
+document.querySelector(".server-launch-button").addEventListener("click", () => {
+    ipcRenderer.invoke("launchServer", document.getElementById("ram-amount-select").value)
 })
 
 document.querySelector(".loadHomePage").addEventListener("click", () => {
